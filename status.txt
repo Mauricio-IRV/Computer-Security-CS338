@@ -1,0 +1,14 @@
+Name: Mauricio I. Reyes Villanueva
+
+Plans for Kali: I have installed Kali on my personal computer using UTM's Virtual Machine. 
+For the most part I had no major issues with the installation and setup process.
+That said, I didn't like the initial screen resolution and the fact that I couldn't resize the display.
+As such, I made some modifications, such as switching over to the virtual-ramfb display card, and using a retina display in settings.
+Additionally, I walked through a step by step on a script that allows for dynamic screen sizing found here:
+https://dannyda.com/2020/10/22/how-to-fix-cant-resize-kali-linux-vm-screen-display-via-virt-viewer-running-on-proxmox-ve-pve-with-default-xfce4-desktop-environment/#4-Make-resize-fully-automatic
+Finally, I also found that I couldn't copy/paste between my device and the linux virtual machine, and so I decided to install the required packages to do so.
+Those packages can be found directly from the UTM documentation, i.e. found here:
+https://docs.getutm.app/guest-support/linux/
+-- I hope this was all within the scope of customizations I am allowed to make to the virtual machine. They seemed pretty superficial so I believe it should be fine 
+but am leaving the details here in case there's anything wrong with doing this for the course (which I doubt, but better safe than sorry).
+Besides that I have no plans and am excited to see what we'll be doing on Kali Linux.

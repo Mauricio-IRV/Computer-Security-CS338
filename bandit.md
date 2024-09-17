@@ -150,7 +150,7 @@ I don't fully understand why "find inhere -type f -size 1033c ! -executable" thi
 
    > exit
 
-   > Referenced: https://mayadevbe.me/posts/overthewire/bandit/level6/
+- Referenced: https://mayadevbe.me/posts/overthewire/bandit/level6/
 
 ## Bandit Level 6 -> 7
 

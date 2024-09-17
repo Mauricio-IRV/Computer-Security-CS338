@@ -1,4 +1,4 @@
-Note: I sometimes switched from second to third person throughout this assignment, so I'd like to apologize about that from a readers perspective before hand.
+Note: As a heads up I'd like to forwarn that at times I switched from second to third person throughout this assignment.
 
 ## Bandit Level 0 -> 1
 

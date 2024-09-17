@@ -1,4 +1,4 @@
-Note: As a heads up I'd like to forwarn that at times I switched from second to third person throughout this assignment.
+Note: As a heads up I'd like to forewarn that at times I switched from second to third person throughout this assignment.
 
 ## Bandit Level 0 -> 1
 

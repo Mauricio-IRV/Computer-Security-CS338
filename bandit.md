@@ -291,6 +291,9 @@ So we'll need to sort the file, and then pipe the stdout into uniq. As such:
 4. Here, based on the instructions, we know that the file is simply using a substitution cipher that consists of 13 place rotation (the ROT13 algorithm). As such we can use "tr" which translates characters to to decipher the content into a human readable text.
    > tr 'A-Za-z' 'N-ZA-Mn-za-m' < data.txt
 
+5. Logout of the remote server
+   > exit
+
 ## Bandit 12 -> 13
 
     > Password: 7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4

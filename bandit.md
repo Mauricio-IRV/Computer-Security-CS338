@@ -1,3 +1,6 @@
+Author: Mauricio I. Reyes Villanueva <br>
+Due: 09/18/2024
+
 Note: As a heads up I'd like to forewarn that at times I switched from second to third person throughout this assignment.
 
 ## Bandit Level 0 -> 1

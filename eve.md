@@ -114,10 +114,7 @@ def dec_16bit_to_ascii(dec):
 	ascii_lower = chr(lower_8_bits)
 	
 	return ascii_lower + ascii_upper
-		
 
-# Needed to separate the two byte numbers used thisi resource
-# https://stackoverflow.com/questions/44179072/separate-2-bytes-hexadecimal-in-1-variable-into-2
 for cipher in encrypted_msg:
 	decrypted_dec = cipher**d_bob % n_bob
 	decrypted_msg += dec_16bit_to_ascii(decrypted_dec)
@@ -131,3 +128,9 @@ print(decrypted_msg)
 
 # Additionally, I did not really know the mathematical formula to solve for d until Luke (a friend of mine who is good at math) mentioned to me that I'd need to solve for the modular multiplicative!
 ```
+
+- The area in my code where I would have failed had the integers been larger were in the fact that calculating the prime factorization for larger numbers would be far more difficult the higher n_bob gets. Additionally though, to not discredit other complicated parts, calculating the multiplicative inverse of a function is no easy task, but pythons built in pow function handles this reasonably efficiently.
+
+- This message encoding is still considered insecure even if the integers are large because, once you get the key its simply a matter of translating the text into english. This is problematic because as Jeff put it, it's essentially just a "complicated substitution cipher."
+
+### EOF

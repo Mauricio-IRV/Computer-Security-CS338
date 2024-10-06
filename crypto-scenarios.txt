@@ -1,0 +1,70 @@
+Author: Mauricio I. Reyes Villanueva
+Due: 10/06/2024
+
+----- Scenarios -----
+
+1. Alice wants to send Bob a long message, and she doesn't want Eve to be able to read it. Assume for this scenario that AITM is impossible.
+> In order for Alice to send Bob a long message, she should use the "Diffie-Hellman" key exchange procedure to agree on a secret key with bob. 
+Once they agree on a key, Alice and Bob could use the key with a symmetric encryption algorithm to encrypt the message with the key and communicate.
+To which they would be able to decrypt the message upon receival.
+
+2. Alice wants to send Bob a long message. She doesn't want Mal to be able to modify the message without Bob detecting the change.
+> In order for Alice to send Bob a long message with confidence in regard to authenticity, alice would need to use public/secret key pairs to create a signature
+of her message. So she would first start off with her message, she would hash it using a hash function such as SHA-256 to create a digest of 256 bytes, and then she
+would encrypt this digest using her private(secret) key, thereby creating a cipher text, which is her digital signature; She could then send this over to bob. This way 
+even if mal is in the middle she cannot make any modifications that would be undetected, because it would fail when bob goes to hash his version of the message and decrypt 
+the digital signature he receives using Alice's public key (which is public to all) if mal were to make any modifications to the message, this is because mal does not 
+have alice's secret key. The digital signature depends on the hashed message, as well as alice's secret key to be created.
+
+In short, bob compares the decrypted hash (which is done using alices public key on the digital signature i.e. cipher text) he gets from "alice", and the hashed message he gets from hashing the message he recieves from "alice"
+and if they don't match, then the message was tampered with.
+
+Note: This would simply make sure that the message being communicated is authentic, but it would not protect against eve's evesdropping, as the message woud not be encoded 
+using an encryption algorithm such as, say, AES. For this to occur, Alice and Bob should use the Diffie Hellman key exchange protocol to derive the same key.
+
+3. Alice wants to send Bob a long message (in this case, it's a signed contract between AliceCom and BobCom), she doesn't want Eve to be able to read it, and she wants Bob to have confidence that it was Alice who sent the message. Assume for this scenario that AITM is impossible.
+> If we assume that AITM is impossible, we can perform a diffie hellman key exchange for alice and bob to determine agree on a secret key for an encryption/decryption 
+algorithm such as AES. From here alice and bob can then begin communicating via the usage of digital signatures. They would first encrypt their message using the 
+agreed upon symmetric key, and then hash that encrypted message to get a digest, and once more encrypt that hashed message using their individual private keys to 
+create a digital signature which can then be sent over the wire to the other party, with eve's presence being around. By doing as such, eve will not be able to decypher 
+the encoded message because she doesn't have the key, thanks to the initial diffie hellman key exchange, and eve will also not be able to tamper the digitial signature
+because she does not have alice's private key, so bob will be able to tell (using alice's public key and crosschecking the hashes of msg and signature) if any changes
+were made to the exchange.
+
+----- Questions About Breaking Security -----
+
+4. Three claims Alice can make regarding C not being the contract Alice sent to Bob.
+a) The ciphertext and digitial signature must have been tampered with.
+This claim would be implausible if alice and bob followed proper communication techniques, but could occur 
+if say, there existed a third party which somehow acquired alice's private key. 
+b) The document must have been tampered with midtransit via AITM
+As usual, this claim would be improbable if proper cryptographic communication techniques were followed, but if
+say, Bob did not take the proper measures to validate that the cypher text received, once hashed, matched the 
+decrypted (using alices public key) then it could be an argument that the document was tampered with therefore 
+invalid.
+c) The contract was tampered with after signing.
+This claim would be implausible if proper cryptographic techniques were followed, but could be believable 
+if a third party somehow acquired alices private key and used it to make a new cyphertext.
+
+5. For this scenario, suppose the assumption that everybody has everybody else's correct public keys is no longer true. Instead, suppose we now have a certificate authority CA, and that everybody has the correct P_CA (i.e. the certificate authority's key). Suppose further that Bob sent his public key P_B to CA, and that CA then delivered to Bob this certificate:
+
+Cert_B = "bob.com" || P_B || Sig_CA
+In terms of P_CA, S_CA, H, E, etc., of what would Sig_CA consist? That is, show the formula CA would use to compute Sig_CA.
+
+> It would consist of the encrypted message which is created using the certificate authorities secret key (S_CA) and the hashed data which is sent over to create the certificate authorities signature which is what bob gets.
+In short: Sig_CA = E(S_CA, H(data))
+
+6. Bob now has the certificate Cert_B from the previous question. During a communication, Bob sends Alice Cert_B. Is that enough for Alice to believe she's talking to Bob? (Hint: no.) What could Alice and Bob do to convince Alice that Bob has the S_B that goes with the P_B in Cert_B?
+> In order for bob to convince alice that he really is bob, he would need to sign his own message with his private/secret key 
+and send that over alongside Cert_B. Alice can then use bob's public key to validate whether or not the message is really from bob.
+
+7. Finally, list at least two ways the certificate-based trust system from the previous two questions could be subverted, allowing Mal to convince Alice that Mal is Bob.
+a) One way by which the certificate based trust system could be subverted, allowing mal to convince alice that mal is bob, is if mal 
+intercepts the communication between of alice and the certificate authorities, mal could replace alice's public key with their own, 
+to receive their own certificate, mal could then use this certificate to send over to bob, and if bob does not verify who the sender 
+is, mal could go on to intercept any communications returned from bob to alice and take on her identity from the very beginning.
+
+b) Alternatively, mal could attempt to impersonate alice and request a certificate from CA, this would be more difficult but certainly 
+possible if the CA does not verify the identity of the requester adequately enough. Mal could then try to use this certificate to 
+communicate with bob, and if bob is not thorough enough, and does not validate the certificate properly then he may be tricked into 
+thinking that he's communicating with alice.

